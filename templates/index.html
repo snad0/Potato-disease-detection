@@ -1,0 +1,151 @@
+<html>
+<head>
+<title>Plant Species Detector</title>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+<style>
+/* body{margin:0;padding:0;background-color:#d9d9d9;background-image:url("{{ url_for('static', filename='nature.jpg') }}");} */
+body{margin:0;padding:0;background: url("../static/nature.png") center center/cover;}
+#header{width:100%;height:70px;background-color:black;opacity:0.9;}
+#mainheader{width:100%;height:70px;background-color:black;margin:auto;}
+h1{text-align: center;padding-top: 100px;color: antiquewhite;}
+/* #main{width:0;height:0;margin:60px auto;background-color:#c3aa99;border-radius:30px;padding-top:50px;z-index: -1;
+    opacity: 0.85;} */
+/* #main{width:1000px;height:700px;margin:60px auto;} */
+#applogo{font-family:Aladin;font-weight:bolder;color:white;font-size:30px;line-height:70px;float:left;}
+#aboutfont{font-size:30px;text-decoration:none;color:white;margin-top:20px;}
+#form{width:200px;height:200px;border-radius:200px;margin:20px auto;}
+#file{width:300px;padding:10px;}
+#submit{width:200px;}
+#msgbox{width:300px;height:auto;background-color:yellow;margin:50px auto;}
+#file-input{display:none;}
+#sub{width:200px;padding:13px;background-color:#ffa366;border:none;color:white;font-weight:bold;font-size:25px;border-radius:10px;padding:15px;}
+
+
+@media (min-width: 500px) and (max-width: 1000px) {
+    
+#header{width:100%;height:70px;background-color:#262a28;opacity:0.6;;}
+#mainheader{width:100%;height:70px;background-color:#262a28;margin:auto;}
+#main{width:65%;height:400px;margin:90px auto;background-color:#262a28;padding-top:40px;border-radius:20px;z-index: -1;
+    opacity: 0.8;}
+#applogo{font-family:Aladin;font-weight:bolder;color:white;font-size:23px;line-height:70px;float:left;margin-left:5px;}
+#aboutfont{font-size:20px;text-decoration:none;color:white;}
+#form{width:140px;height:140px;border-radius:140px;margin:0px auto;}
+#file{width:300px;padding:10px;}
+#submit{width:200px;background-color:pink;}
+#msgbox{width:300px;height:auto;background-color:yellow;margin:60px auto;}
+#file-input{display:none;}
+#sub{width:150px;padding:10px;background-color:#008080;border:none;color:white;font-weight:bold;font-size:23px;margin-right:75px;border-radius:10px;padding:15px;}
+}
+@media (min-width: 300px) and (max-width: 500px) {
+    
+#header{width:100%;height:70px;background-color:#262a28;opacity:0.6;;}
+#mainheader{width:100%;height:70px;background-color:#262a28;margin:auto;}
+#main{width:85%;height:300px;margin:90px auto;background-color:#262a28;padding-top:40px;border-radius:20px;z-index: -1;
+    opacity: 0.8;}
+#applogo{font-family:Aladin;font-weight:bolder;color:white;font-size:23px;line-height:70px;float:left;margin-left:5px;}
+#aboutfont{font-size:20px;text-decoration:none;color:white;}
+#form{width:140px;height:140px;border-radius:140px;margin:0px auto;}
+#file{width:300px;padding:10px;}
+#submit{width:200px;background-color:pink;}
+#msgbox{width:300px;height:auto;background-color:yellow;margin:60px auto;}
+#file-input{display:none;}
+#sub{width:150px;padding:10px;background-color:#008080;border:none;color:white;font-weight:bold;font-size:23px;margin-right:75px;border-radius:10px;padding:15px;}
+}
+
+
+</style>
+</head>
+
+<body>
+<div id="header">
+<div id="mainheader">
+<a href="/" id="applogo" style="text-decoration:none;"><i>Potato Disease Detection</i></a>
+</div>
+</div>
+<div id ="main">
+  <h1>upload image of your plant below to see the results</h1>
+
+
+
+
+<form id="form" action="/" method="post" enctype="multipart/form-data">
+ 
+ 
+<label for="file-input">
+<img id="previewimage" src="../static/upload.svg" style="width:100%;height:100%;border-radius:100%;"/>
+</label>
+<input name="imgfile" id="file-input" type="file" onchange="document.getElementById('previewimage').src = window.URL.createObjectURL(this.files[0])"  accept="image/*" required="required"/><br><br>
+<p text-align="center">
+<input type="submit" value="Get Result" name="submit" id="sub"></p>
+</form>
+
+
+
+<script>
+
+// ----- On render -----
+$(function() {
+
+  $('#profile').addClass('dragging').removeClass('dragging');
+});
+
+$('#profile').on('dragover', function() {
+  $('#profile').addClass('dragging')
+}).on('dragleave', function() {
+  $('#profile').removeClass('dragging')
+}).on('drop', function(e) {
+  $('#profile').removeClass('dragging hasImage');
+
+  if (e.originalEvent) {
+    var file = e.originalEvent.dataTransfer.files[0];
+    console.log(file);
+
+    var reader = new FileReader();
+
+    //attach event handlers here...
+
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      console.log(reader.result);
+      $('#profile').css('background-image', 'url(' + reader.result + ')').addClass('hasImage');
+
+    }
+
+  }
+})
+$('#profile').on('click', function(e) {
+  console.log('clicked')
+  $('#mediaFile').click();
+});
+window.addEventListener("dragover", function(e) {
+  e = e || event;
+  e.preventDefault();
+}, false);
+window.addEventListener("drop", function(e) {
+  e = e || event;
+  e.preventDefault();
+}, false);
+$('#mediaFile').change(function(e) {
+
+  var input = e.target;
+  if (input.files && input.files[0]) {
+    var file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      console.log(reader.result);
+      $('#profile').css('background-image', 'url(' + reader.result + ')').addClass('hasImage');
+    }
+  }
+})
+
+
+
+
+</script>
+
+
+</html>
